@@ -1,4 +1,4 @@
-import { Button, Input, NumberInput, NumberInputField, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { Button, HStack, Input, NumberInput, NumberInputField, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // import { customRound } from "../../utils/helper/helper";
@@ -140,13 +140,15 @@ const Index = () => {
         padding={"30px"}
         backgroundColor={"#FFFFFF"}
         boxShadow={"0 2px 10px rgba(0, 0, 0, 0.1)"}
-        maxWidth={"97%"}
+        width={{ base: "95%", md: "80%" }}
         gap={"20px"}
         marginY={"10vh"}
-        width={"80%"}
         borderRadius={"12px"}
       >
-        <Stack width={"600px"}>
+        <Text as={"b"} fontSize={"20px"} textAlign={"center"} marginBottom={"20px"}>
+          FEASIBILITY ANALYSIS HEAVY EQUIPMENT
+        </Text>
+        <Stack width={"100%"} maxWidth={"600px"}>
           <Stack>
             <Text>Model Unit</Text>
             <Input type="text" value={modelUnit} disabled />
@@ -249,10 +251,17 @@ const Index = () => {
                     <Tr key={index}>
                       <Td>{i.jamKerja}</Td>
                       <Td>
-                        {formatNumber(i.profitCumulative)} {i.optimumPoint1 ? "(Optimum)" : ""} {i.breakEventPoint ? "(BEP)" : ""}
+                        <HStack gap={"30px"} display={"flex"}>
+                          <Text>{formatNumber(i.profitCumulative)}</Text>
+                          {i.optimumPoint1 ? <Text>(Optimum)</Text> : null}
+                          {i.breakEventPoint ? <Text>(BEP)</Text> : null}
+                        </HStack>
                       </Td>
                       <Td>
-                        {formatNumber(i.profitCumulativePlusSellUnit)} {i.optimumPoint2 ? "(Optimum)" : ""}
+                        <HStack gap={"30px"} display={"flex"}>
+                          <Text>{formatNumber(i.profitCumulativePlusSellUnit)}</Text>
+                          {i.optimumPoint2 ? <Text>(Optimum)</Text> : null}
+                        </HStack>
                       </Td>
                       {/* <Td>{i.optimumPoint1}</Td>
                       <Td>{i.optimumPoint2}</Td> */}
