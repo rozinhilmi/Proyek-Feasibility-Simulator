@@ -98,7 +98,7 @@ const Index = () => {
         backgroundColor: "orange",
         yAxisID: "y1",
         fill: true,
-        tension: 0.1,
+        tension: 0,
         pointRadius: result.map((i: any) => (i.breakEventPoint !== "" ? 5 : 0)),
       },
       {
@@ -108,7 +108,7 @@ const Index = () => {
         backgroundColor: "rgba(75, 192, 192, 1)",
         yAxisID: "y1",
         fill: true,
-        tension: 0.1,
+        tension: 0,
         pointRadius: result.map((i: any) => (i.optimumPoint1 !== "" ? 5 : 0)),
       },
       {
@@ -118,8 +118,18 @@ const Index = () => {
         backgroundColor: "rgba(255, 99, 132, 1)",
         yAxisID: "y1",
         fill: true,
-        tension: 0.1,
+        tension: 0,
         pointRadius: result.map((i: any) => (i.optimumPoint2 !== "" ? 5 : 0)),
+      },
+      {
+        label: "y=0",
+        data: result.map(() => 0),
+        borderColor: "rgba(0,0,0,0.1)",
+        backgroundColor: "rgba(0,0,0,0.1)",
+        yAxisID: "y1",
+        fill: true,
+        tension: 0,
+        pointRadius: 0,
       },
     ],
   };
@@ -232,15 +242,20 @@ const Index = () => {
                     position: "left",
                   },
                 },
+                plugins: {
+                  legend: {
+                    display: true, // Tampilkan legend
+                  },
+                },
               }}
             />
             <TableContainer>
               <Table size="sm">
                 <Thead>
                   <Tr>
-                    <Th>Jam Kerja</Th>
-                    <Th>Profit Kumulatif (1)</Th>
-                    <Th>Profit Kumulatif + Sell Unit (2)</Th>
+                    <Th border={"1px solid grey"}>Jam Kerja</Th>
+                    <Th border={"1px solid grey"}>Profit Kumulatif (1)</Th>
+                    <Th border={"1px solid grey"}>Profit Kumulatif + Sell Unit (2)</Th>
                     {/* <Th>Break Event Point</Th>
                     <Th>Optimum Point (1)</Th>
                     <Th>Optimum Point (2)</Th> */}
@@ -249,15 +264,18 @@ const Index = () => {
                 <Tbody>
                   {result.map((i: any, index: number) => (
                     <Tr key={index}>
-                      <Td>{i.jamKerja}</Td>
-                      <Td>
+                      <Td border={"1px solid grey"}>{i.jamKerja}</Td>
+                      <Td
+                        border={"1px solid grey"}
+                        backgroundColor={i.breakEventPoint ? "orange" : i.optimumPoint1 ? "rgba(75, 192, 192, 1)" : "none"}
+                      >
                         <HStack gap={"30px"} display={"flex"}>
                           <Text>{formatNumber(i.profitCumulative)}</Text>
                           {i.optimumPoint1 ? <Text>(Optimum)</Text> : null}
                           {i.breakEventPoint ? <Text>(BEP)</Text> : null}
                         </HStack>
                       </Td>
-                      <Td>
+                      <Td border={"1px solid grey"} backgroundColor={i.optimumPoint2 ? "rgba(255, 99, 132, 1)" : "none"}>
                         <HStack gap={"30px"} display={"flex"}>
                           <Text>{formatNumber(i.profitCumulativePlusSellUnit)}</Text>
                           {i.optimumPoint2 ? <Text>(Optimum)</Text> : null}
