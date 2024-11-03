@@ -23,6 +23,7 @@ const Index = () => {
   });
   // const navigate = useNavigate();
   const [result, setResult] = useState<any>([]);
+  const [optimumHour, setOptimumHour] = useState<number[]>([]);
   // const [breakEventPointResult, setBreakEventPointResult] = useState<any>(null);
   // const [optimumPoint1Result, setOptimumPoint1Result] = useState<any>(null);
   // const [optimumPoint2Result, setOptimumPoint2Result] = useState<any>(null);
@@ -82,6 +83,10 @@ const Index = () => {
 
     setResult(
       masterJamKerja.map((i, index) => {
+        if (profitCumulative[index] === optimumPoint1 || profitCumulativePlusSellUnit[index] === optimumPoint2) {
+          setOptimumHour((prev) => [...prev, i]);
+        }
+
         return {
           jamKerja: i,
           profitCumulative: profitCumulative[index],
@@ -257,7 +262,7 @@ const Index = () => {
             <Stack width={"100%"} minHeight={"400px"} overflow={"scroll"}>
               <Line
                 id="result"
-                style={{ paddingTop: "40px", minHeight: "400px", width: "100%", minWidth: "500px" }}
+                style={{ paddingTop: "40px", minHeight: "700px", width: "100%", minWidth: "500px", fontSize: "10px" }}
                 data={chartData}
                 options={{
                   responsive: true,
@@ -311,7 +316,10 @@ const Index = () => {
                         <Text fontWeight={"bold"}>• Profit naik </Text>
                         <Text>seiring bertambahnya jam kerja hingga mencapai </Text>
                         <Text fontWeight={"bold"}>titik tertinggi </Text>
-                        <Text>(sekitar 16.000 - 17.000 jam).</Text>
+                        <Text>
+                          (sekitar {optimumHour.length == 2 ? `${optimumHour[0]} dan ${optimumHour[1]}` : optimumHour.length ? optimumHour[0] : 0}
+                          {" jam."})
+                        </Text>
                       </HStack>
                       <HStack flexWrap={"wrap"} gap={"5px"}>
                         <Text fontWeight={"bold"}>• Setelah puncak </Text>
@@ -319,7 +327,7 @@ const Index = () => {
                         <Text fontWeight={"bold"}>menurun tajam,</Text>
                         <Text>hingga akhirnya menjadi </Text>
                         <Text fontWeight={"bold"}>negatif</Text>
-                        <Text>setelah jam kerja melebihi 30.000.</Text>
+                        <Text>setelah jam kerja melebihi {result.filter((i: any) => i.profitCumulative < 0)?.[0]?.jamKerja - 1000 || 0}.</Text>
                       </HStack>
                     </td>
                   </tr>
@@ -327,7 +335,7 @@ const Index = () => {
               </table>
               <hr style={{ marginTop: "20px", marginBottom: "20px" }} />
               <Text fontWeight={"bold"}>Tabel Profit dan Titik Penting</Text>
-              {/* <pre>{JSON.stringify(result.filter((i: any) => i.optimumPoint1 !== "")?.[0], null, 2)}</pre> */}
+              {/* <pre>{JSON.stringify(optimumHour, null, 2)}</pre> */}
 
               <table>
                 <tbody>
@@ -350,7 +358,9 @@ const Index = () => {
                       <Text fontWeight={"bold"}>Titik Optimum:</Text>
                       <HStack flexWrap={"wrap"} gap={"5px"}>
                         <Text>• Profit tertinggi dicapai pada </Text>
-                        <Text fontWeight={"bold"}>16.000 - 17.000 jam kerja:</Text>
+                        <Text fontWeight={"bold"}>
+                          {optimumHour.length == 2 ? `${optimumHour[0]} dan ${optimumHour[1]}` : optimumHour.length ? optimumHour[0] : 0} jam kerja:
+                        </Text>
                       </HStack>
                       <HStack flexWrap={"wrap"} marginLeft={"30px"}>
                         <Text fontWeight={"bold"}>• Profit Kumulatif: </Text>
@@ -388,7 +398,9 @@ const Index = () => {
                     <HStack flexWrap={"wrap"} gap={"5px"}>
                       <Text fontWeight={"bold"}>Jam kerja ideal:</Text>
                       <Text>Sekitar</Text>
-                      <Text fontWeight={"bold"}>16.000 - 17.000 jam </Text>
+                      <Text fontWeight={"bold"}>
+                        {optimumHour.length == 2 ? `${optimumHour[0]} dan ${optimumHour[1]}` : optimumHour.length ? optimumHour[0] : 0} jam{" "}
+                      </Text>
                       <Text>untuk profit maksimal.</Text>
                     </HStack>
                   </td>
