@@ -317,7 +317,7 @@ const Index = () => {
                         <Text>seiring bertambahnya jam kerja hingga mencapai </Text>
                         <Text fontWeight={"bold"}>titik tertinggi </Text>
                         <Text>
-                          (sekitar {optimumHour.length == 2 ? `${optimumHour[0]} dan ${optimumHour[1]}` : optimumHour.length ? optimumHour[0] : 0}
+                          (sekitar {optimumHour.length == 2 ? `${optimumHour[0]} & ${optimumHour[1]}` : optimumHour.length ? optimumHour[0] : 0}
                           {" jam."})
                         </Text>
                       </HStack>
@@ -359,7 +359,7 @@ const Index = () => {
                       <HStack flexWrap={"wrap"} gap={"5px"}>
                         <Text>• Profit tertinggi dicapai pada </Text>
                         <Text fontWeight={"bold"}>
-                          {optimumHour.length == 2 ? `${optimumHour[0]} dan ${optimumHour[1]}` : optimumHour.length ? optimumHour[0] : 0} jam kerja:
+                          {optimumHour.length == 2 ? `${optimumHour[0]} & ${optimumHour[1]}` : optimumHour.length ? optimumHour[0] : 0} jam kerja:
                         </Text>
                       </HStack>
                       <HStack flexWrap={"wrap"} marginLeft={"30px"}>
@@ -399,7 +399,7 @@ const Index = () => {
                       <Text fontWeight={"bold"}>Jam kerja ideal:</Text>
                       <Text>Sekitar</Text>
                       <Text fontWeight={"bold"}>
-                        {optimumHour.length == 2 ? `${optimumHour[0]} dan ${optimumHour[1]}` : optimumHour.length ? optimumHour[0] : 0} jam{" "}
+                        {optimumHour.length == 2 ? `${optimumHour[0]} & ${optimumHour[1]}` : optimumHour.length ? optimumHour[0] : 0} jam{" "}
                       </Text>
                       <Text>untuk profit maksimal.</Text>
                     </HStack>
