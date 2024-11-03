@@ -148,9 +148,20 @@ const Index = () => {
   };
 
   const handlePrint = () => {
+    setShowButtonUnduh(false);
+    const element = document.getElementById("result");
+    if (element) {
+      element.style.transform = `scale(${0.6})`;
+      element.style.transformOrigin = "0 0"; // Mengatur titik asal skala
+      element.style.width = `${100 / 0.6}%`; // Mengatur lebar elemen agar sesuai
+    }
     setTimeout(() => {
-      setShowButtonUnduh(false);
       window.print();
+      if (element) {
+        element.style.transform = `scale(${1})`;
+        element.style.transformOrigin = "0 0"; // Mengatur titik asal skala
+        element.style.width = `${100 / 1}%`; // Mengatur lebar elemen agar sesuai
+      }
       setShowButtonUnduh(true);
     }, 200);
   };
@@ -249,12 +260,16 @@ const Index = () => {
             </Text>
           </Stack>
 
-          <Button marginTop={"20px"} colorScheme="blue" disabled={!modelUnit || !typeUnit} onClick={calculate1}>
-            Calculation
-          </Button>
-          <Button colorScheme="blue" variant="link" onClick={() => navigate("/")}>
-            Back
-          </Button>
+          {result.length && !showButtonUnduh ? null : (
+            <>
+              <Button marginTop={"20px"} colorScheme="blue" disabled={!modelUnit || !typeUnit} onClick={calculate1}>
+                Calculation
+              </Button>
+              <Button colorScheme="blue" variant="link" onClick={() => navigate("/")}>
+                Back
+              </Button>
+            </>
+          )}
         </Stack>
 
         {result.length ? (
