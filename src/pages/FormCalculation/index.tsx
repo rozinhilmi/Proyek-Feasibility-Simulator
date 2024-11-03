@@ -254,25 +254,28 @@ const Index = () => {
 
         {result.length ? (
           <>
-            <Line
-              id="result"
-              style={{ paddingTop: "40px", width: "2000px" }}
-              data={chartData}
-              options={{
-                responsive: true,
-                scales: {
-                  y1: {
-                    type: "linear",
-                    position: "left",
+            <Stack width={"100%"} minHeight={"400px"} overflow={"scroll"}>
+              <Line
+                id="result"
+                style={{ paddingTop: "40px", minHeight: "400px", width: "100%", minWidth: "500px" }}
+                data={chartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y1: {
+                      type: "linear",
+                      position: "left",
+                    },
                   },
-                },
-                plugins: {
-                  legend: {
-                    display: true, // Tampilkan legend
+                  plugins: {
+                    legend: {
+                      display: true, // Tampilkan legend
+                    },
                   },
-                },
-              }}
-            />
+                }}
+              />
+            </Stack>
 
             <Stack gap={"5px"} marginY={"35px"} fontSize={"14px"}>
               <Text textAlign={"center"} fontWeight={"bold"} marginBottom={"20px"}>
