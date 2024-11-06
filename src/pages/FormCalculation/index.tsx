@@ -2,7 +2,15 @@ import { Button, HStack, Input, NumberInput, NumberInputField, Stack, Table, Tab
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // import { customRound } from "../../utils/helper/helper";
-import { masterCoefInt, masterCoefMainCost, masterCoefOpr, masterCoefPerformance, masterCoefUnitBerkas, masterJamKerja } from "./masterVariable";
+import {
+  masterCoefInt,
+  masterCoefMainCost,
+  masterCoefOpr,
+  masterCoefPerformance,
+  masterCoefUnitBerkas,
+  masterJamKerja,
+  masterTahun,
+} from "./masterVariable";
 
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, CategoryScale, Title, Tooltip, Legend } from "chart.js";
@@ -24,14 +32,14 @@ const Index = () => {
   // const navigate = useNavigate();
   const [result, setResult] = useState<any>([]);
   const [optimumHour, setOptimumHour] = useState<number[]>([]);
-  // const [breakEventPointResult, setBreakEventPointResult] = useState<any>(null);
-  // const [optimumPoint1Result, setOptimumPoint1Result] = useState<any>(null);
-  // const [optimumPoint2Result, setOptimumPoint2Result] = useState<any>(null);
+  const [dataState, setDataState] = useState<any>({});
 
   const inputValue = (key: string, value: string) => {
     setInputState({ ...inputState, [key]: Number(value) });
   };
   const [showButtonUnduh, setShowButtonUnduh] = useState<boolean>(false);
+  const [showCalculationDetail, setShowCalculationDetail] = useState<boolean>(false);
+
   const calculate1 = () => {
     setShowButtonUnduh(true);
     let hargaUnitBekas = masterCoefUnitBerkas.map((i) => inputState.priceUnit * i);
@@ -75,11 +83,22 @@ const Index = () => {
     let profitCumulativePlusSellUnit = profitCumulative.map((i, index) => i + hargaUnitBekas[index]);
     let optimumPoint1 = Math.max(...profitCumulative);
     let optimumPoint2 = Math.max(...profitCumulativePlusSellUnit);
-    // setOptimumPoint1Result(optimumPoint1);
-    // setOptimumPoint2Result(optimumPoint2);
-    // setBreakEventPointResult(breakEventPoint);
 
-    // console.log(JSON.stringify(profitCumulativePlusSellUnit.map((i) => customRound(i))));
+    setDataState({
+      hargaUnitBekas: hargaUnitBekas,
+      revenue: revenue,
+      mainCost: mainCost,
+      oprCost: oprCost,
+      intCost: intCost,
+      masterProfitNonIntCost: masterProfitNonIntCost,
+      masterProfitKumulatif: masterProfitKumulatif,
+      masterProfit: masterProfit,
+      profitCumulative: profitCumulative,
+      profitCumulativePlusSellUnit: profitCumulativePlusSellUnit,
+      breakEventPoint: breakEventPoint,
+      optimumPoint1: optimumPoint1,
+      optimumPoint2: optimumPoint2,
+    });
 
     setResult(
       masterJamKerja.map((i, index) => {
@@ -151,14 +170,14 @@ const Index = () => {
     setShowButtonUnduh(false);
     const element = document.getElementById("result");
     if (element) {
-      element.style.transform = `scale(${0.6})`;
+      element.style.transform = `scaleX(${0.6})`;
       element.style.transformOrigin = "0 0"; // Mengatur titik asal skala
       element.style.width = `${100 / 0.6}%`; // Mengatur lebar elemen agar sesuai
     }
     setTimeout(() => {
       window.print();
       if (element) {
-        element.style.transform = `scale(${1})`;
+        element.style.transform = `scaleX(${1})`;
         element.style.transformOrigin = "0 0"; // Mengatur titik asal skala
         element.style.width = `${100 / 1}%`; // Mengatur lebar elemen agar sesuai
       }
@@ -476,6 +495,99 @@ const Index = () => {
                 </Tbody>
               </Table>
             </TableContainer>
+          </>
+        ) : null}
+
+        {result.length && showButtonUnduh ? (
+          <>
+            <Button
+              onClick={() => (showCalculationDetail ? setShowCalculationDetail(false) : setShowCalculationDetail(true))}
+              marginTop={"20px"}
+              colorScheme="blue"
+              width={"250px"}
+              alignSelf={"center"}
+            >
+              {showCalculationDetail ? "Hide Calculations Details" : "Show Calculations Details"}
+            </Button>
+            {showCalculationDetail ? (
+              <>
+                <TableContainer>
+                  <Table size="sm">
+                    <Thead>
+                      <Tr>
+                        <Th border={"1px solid grey"}>Tahun</Th>
+                        <Th border={"1px solid grey"}>Jam Kerja</Th>
+                        <Th border={"1px solid grey"}>Coef Unit Berkas</Th>
+                        <Th border={"1px solid grey"}>Harga Unit Berkas</Th>
+                        <Th border={"1px solid grey"}>Coef Performance</Th>
+                        <Th border={"1px solid grey"}>Revenue</Th>
+                        <Th border={"1px solid grey"}>Coef Main Cost</Th>
+                        <Th border={"1px solid grey"}>Maint Cost</Th>
+                        <Th border={"1px solid grey"}>Coef Opr</Th>
+                        <Th border={"1px solid grey"}>Opr Cost</Th>
+                        <Th border={"1px solid grey"}>Coef Int</Th>
+                        <Th border={"1px solid grey"}>Int Cost</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {masterTahun.map((i: any, index: number) => (
+                        <Tr key={index}>
+                          <Td border={"1px solid grey"}>{i}</Td>
+                          <Td border={"1px solid grey"}>{masterJamKerja[index]}</Td>
+                          <Td border={"1px solid grey"}>{masterCoefUnitBerkas[index]}</Td>
+                          <Td border={"1px solid grey"}>{formatNumber(dataState?.hargaUnitBekas?.[index] || 0)}</Td>
+                          <Td border={"1px solid grey"}>{masterCoefPerformance[index]}</Td>
+                          <Td border={"1px solid grey"}>{formatNumber(dataState?.revenue?.[index] || 0)}</Td>
+                          <Td border={"1px solid grey"}>{masterCoefMainCost[index]}</Td>
+                          <Td border={"1px solid grey"}>{formatNumber(dataState?.mainCost?.[index] || 0)}</Td>
+                          <Td border={"1px solid grey"}>{masterCoefOpr[index]}</Td>
+                          <Td border={"1px solid grey"}>{formatNumber(dataState?.oprCost?.[index] || 0)}</Td>
+                          <Td border={"1px solid grey"}>{masterCoefInt[index]}</Td>
+                          <Td border={"1px solid grey"}>{dataState?.intCost?.[index] || ""}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+
+                <TableContainer>
+                  <Table size="sm">
+                    <Thead>
+                      <Tr>
+                        <Th border={"1px solid grey"}>Profit Non Int Cost</Th>
+                        <Th border={"1px solid grey"}>Profit Kumulatif</Th>
+                        <Th border={"1px solid grey"}>Break Event Point</Th>
+                        <Th border={"1px solid grey"}>Profit</Th>
+                        <Th border={"1px solid grey"}>Profit Commulative</Th>
+                        <Th border={"1px solid grey"}>Profit Commulative + Sell Unit</Th>
+                        <Th border={"1px solid grey"}>Optimum Point 1</Th>
+                        <Th border={"1px solid grey"}>Optimum 2</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {masterJamKerja.map((i: any, index: number) => (
+                        <Tr key={i}>
+                          <Td border={"1px solid grey"}>{formatNumber(dataState?.masterProfitNonIntCost?.[index] || 0)}</Td>
+                          <Td border={"1px solid grey"}>{formatNumber(dataState?.masterProfitKumulatif?.[index] || 0)}</Td>
+                          <Td border={"1px solid grey"}>
+                            {(dataState?.masterProfitKumulatif?.[index] || 0) === dataState?.breakEventPoint ? "BEP" : ""}
+                          </Td>
+                          <Td border={"1px solid grey"}>{formatNumber(dataState?.masterProfit?.[index] || 0)}</Td>
+                          <Td border={"1px solid grey"}>{formatNumber(dataState?.profitCumulative?.[index] || 0)}</Td>
+                          <Td border={"1px solid grey"}>{formatNumber(dataState?.profitCumulativePlusSellUnit?.[index] || 0)}</Td>
+                          <Td border={"1px solid grey"}>
+                            {(dataState?.profitCumulative?.[index] || 0) === dataState?.optimumPoint1 ? "Optimum" : ""}
+                          </Td>
+                          <Td border={"1px solid grey"}>
+                            {(dataState?.profitCumulativePlusSellUnit?.[index] || 0) === dataState?.optimumPoint2 ? "Optimum" : ""}
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
+            ) : null}
           </>
         ) : null}
       </Stack>
