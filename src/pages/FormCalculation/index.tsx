@@ -100,6 +100,7 @@ const Index = () => {
       optimumPoint2: optimumPoint2,
     });
 
+    setOptimumHour([]);
     setResult(
       masterJamKerja.map((i, index) => {
         if (profitCumulative[index] === optimumPoint1 || profitCumulativePlusSellUnit[index] === optimumPoint2) {
